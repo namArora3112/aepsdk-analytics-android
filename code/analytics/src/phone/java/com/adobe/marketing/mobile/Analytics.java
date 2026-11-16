@@ -163,12 +163,14 @@ public class Analytics {
 
     /** Forces analytics to send all queued hits regardless of current batch options. */
     public static void sendQueuedHits() {
+        final String telemetryOp = com.adobe.marketing.mobile.telemetrybridge.TelemetryBridge.operationStarted("com.adobe.analytics", "sdk.analytics.sendQueuedHits");
         Map<String, Object> eventDataMap = new HashMap<>();
         eventDataMap.put(FORCE_KICK_HITS, true);
         MobileCore.dispatchEvent(
                 new Event.Builder("ForceKickHits", EventType.ANALYTICS, EventSource.REQUEST_CONTENT)
                         .setEventData(eventDataMap)
                         .build());
+        com.adobe.marketing.mobile.telemetrybridge.TelemetryBridge.operationCompleted(telemetryOp, "com.adobe.analytics", "sdk.analytics.sendQueuedHits", "dispatched", "request dispatched");
         Log.debug(LOG_TAG, LOG_TAG, "sendQueuedHits - Kick all hits event was sent");
     }
 
